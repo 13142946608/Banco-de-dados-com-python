@@ -1,0 +1,46 @@
+ 
+import sys
+import commands
+import os
+import gzip
+from datetime import datetime, timedelta
+from shutil import copyfileobj
+ 
+
+for database in database:
+ 
+    fo = open("log", "wb")
+    generateSyntaxBackup   = database+"_"+datetime.now().strftime('%d%m%Y')+".sql"
+    deleteOldBackup = directorybackup+database+"_"+(datetime.now()-timedelta(days=retention)).strftime('%d%m%Y')+".sql"
+    cmd   = "mysqldump -h "+host+" -u "+user+" --password="+password+" "+database+" --single-transaction --master-data=2 > "+directorybackup+generateSyntaxBackup
+    fo.write(datetime.now().strftime('%a, %d %b %Y %H:%M:%S')+" Backup "+database+" running.\n")
+    
+    commands.getoutput(cmd)
+    
+    checkingBackup   = open(directorybackup+generateSyntaxBackup)
+    checkingBackupFiles = checkingBackup.readline()
+    fo.write(datetime.now().strftime('%a, %d %b %Y %H:%M:%S')+" Backup "+database+" successfully executed.\n")
+    # Delete old Backup
+    if len(checkingBackupFiles) > 1:
+        try:
+            os.remove(deleteOldBackup)
+        except OSError:
+            pass
+        except Error:
+            pass
+    else:
+        pass
+   
+    checkingBackup.close()
+   
+    fo.write(datetime.now().strftime('%a, %d %b %Y %H:%M:%S')+" Backup "+database+" being compacted.\n")
+    f_in = open(directorybackup+generateSyntaxBackup, 'rb')
+    f_out = gzip.open(directorybackup+generateSyntaxBackup+'.gz', 'wb')
+    f_out.writelines(f_in)
+    f_out.close()
+    f_in.close()
+    fo.write(datetime.now().strftime('%a, %d %b %Y %H:%M:%S')+" Backup "+database+" packed with success.\n")
+    os.remove(directorybackup+generateSyntaxBackup)
+    fo.close()
+
+sys.exit(0)

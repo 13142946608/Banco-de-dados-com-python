@@ -1,0 +1,37 @@
+
+import os,sys
+import getpass
+
+class conexaoDB:	
+	def conect( self, user, password, db, host="localhost", port="3306",comand="show databases"):
+		self.host = host
+		self.user = user
+		self.password = password 
+		self.port = port
+		self.comand = comand
+		self.db = db
+
+		os.system("mysql --host=%s --port=%s --user=%s --password=%s -e '%s' -D %s" %(host ,port ,user ,password,comand,db ))
+		
+
+>>> import ConexaoDB
+>>> var = ConexaoDB.conecxaoBD()
+>>> var.conect(password="****", user="root", db="merEstoque", host="localhost", port="3306",comand="show databases")
+
+
+import ConexaoDB
+var = ConexaoDB.conexaoDB()
+var.conect(password="****", user="root", db="merEstoque", host="localhost", port="3306",comand="show databases")
+
+
+comando = " select * from EMPRESAS "
+host = "localhost"
+usuario = "root"
+password = getpass.getpass('Senha: ')
+porta = "3306"
+banco = "merEstoque"
+conecta=conexaoDB()
+conecta.conect(usuario,password,banco,host,porta,comando)#quantidade de arg e posicao
+conecta.conect(usuario,password,banco)#quantidade minimo
+conecta.conect(usuario, password, banco, comand="show tables")#arg nomeada*
+conecta.conect(password="****", user="root", db="merEstoque", host="localhost", port="3306",comand="show databases")
